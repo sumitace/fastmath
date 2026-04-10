@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id                     Int       @id @default(autoincrement())
+  session_type           String    @default("standard")
+  start_time             DateTime
+  end_time               DateTime?
+  time_limit_seconds     Int       @default(120)
+  questions_answered     Int       @default(0)
+  total_score            Int       @default(0)
+  average_relative_error Float     @default(0)
+  bullseye_count         Int       @default(0)
+  green_count            Int       @default(0)
+  yellow_count           Int       @default(0)
+  orange_count           Int       @default(0)
+  red_count              Int       @default(0)
+  attempts               Attempt[]
+}
+
+model Attempt {
+  id                Int      @id @default(autoincrement())
+  session_id        Int
+  question_index    Int
+  category          String
+  subcategory       String
+  difficulty        String
+  prompt_text       String
+  problem_data_json String
+  true_answer       Float
+  user_answer       Float
+  absolute_error    Float
+  relative_error    Float
+  error_direction   String
+  zone              String
+  points            Int
+  heuristic_text    String
+  response_time_ms  Int
+  presented_at      DateTime
+  answered_at       DateTime
+  session           Session  @relation(fields: [session_id], references: [id])
+}
