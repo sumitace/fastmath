@@ -1,3 +1,5 @@
+name: fastmath
+
 services:
   app:
     container_name: fastmath-dev
