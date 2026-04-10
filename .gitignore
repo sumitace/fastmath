@@ -6,3 +6,4 @@ dist/
 prisma/migrations/
 coverage/
 .DS_Store
+.claude/
