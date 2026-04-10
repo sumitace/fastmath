@@ -72,8 +72,8 @@ export async function runGameLoop(difficulty: Difficulty = 'medium'): Promise<vo
   printSummary(summary, durationSeconds);
 
   if (attempts.length > 0) {
-    await saveFullSession(summary, startTime, endTime, 120).catch(() => {
-      // DB errors are non-fatal — session still completed
+    await saveFullSession(summary, startTime, endTime, 120).catch((err: unknown) => {
+      process.stderr.write(`Warning: session could not be saved: ${err instanceof Error ? err.message : String(err)}\n`);
     });
   }
 

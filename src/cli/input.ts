@@ -15,7 +15,7 @@ export function promptNumericAnswer(
     rl.question(promptStr, (answer) => {
       const trimmed = answer.trim();
       const parsed = parseFloat(trimmed);
-      if (isNaN(parsed)) {
+      if (isNaN(parsed) || !isFinite(parsed)) {
         reject(new Error(`"${trimmed}" is not a number`));
       } else {
         resolve(parsed);
