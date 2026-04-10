@@ -1,0 +1,31 @@
+{
+  "name": "Fastmath Dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "appuser",
+  "updateRemoteUserUID": true,
+  "postCreateCommand": "npm install && npx prisma generate && echo 'DevContainer ready'",
+  "containerEnv": {
+    "DATABASE_URL": "file:/workspace/fastmath.db",
+    "CLAUDE_CONFIG_DIR": "/home/appuser/.claude"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.rulers": [100],
+        "typescript.tsdk": "/workspace/node_modules/typescript/lib",
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "prisma.prisma",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}

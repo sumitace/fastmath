@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  app:
+    container_name: fastmath-dev
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: development
+      args:
+        USER_UID: ${HOST_UID:-1000}
+        USER_GID: ${HOST_GID:-1000}
+    volumes:
+      - ../:/workspace:cached
+      - fastmath-node-modules:/workspace/node_modules
+      - ${HOME}/.claude:/home/appuser/.claude
+      - ${HOME}/.claude.json:/home/appuser/.claude.json
+      - ${HOME}/.ssh:/home/appuser/.ssh:ro
+      - ${HOME}/.gitconfig:/home/appuser/.gitconfig:ro
+      - ${HOME}/.config/gh:/home/appuser/.config/gh
+      - ${HOME}/.config/nvim:/home/appuser/.config/nvim
+      - nvim-data:/home/appuser/.local/share/nvim
+      - nvim-state:/home/appuser/.local/state/nvim
+    command: sleep infinity
+    env_file:
+      - path: ../.env.local
+        required: false
+    environment:
+      - DATABASE_URL=file:/workspace/fastmath.db
+
+volumes:
+  fastmath-node-modules:
+  nvim-data:
+  nvim-state:
