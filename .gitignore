@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.db
+*.db-journal
+.env
+prisma/migrations/
+coverage/
+.DS_Store
