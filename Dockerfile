@@ -58,8 +58,9 @@ RUN wget -q https://github.com/neovim/neovim/releases/latest/download/nvim-linux
     ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim && \
     rm /tmp/nvim.tar.gz
 
-# Create Claude config dir with correct ownership before switching users
-RUN mkdir -p /home/appuser/.claude && chown -R appuser:appuser /home/appuser/.claude
+# Create Claude config dir and node_modules with correct ownership before switching users
+RUN mkdir -p /home/appuser/.claude && chown -R appuser:appuser /home/appuser/.claude && \
+    mkdir -p /workspace/node_modules && chown appuser:appuser /workspace/node_modules
 
 USER appuser
 
