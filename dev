@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+COMPOSE_FILE=".devcontainer/docker-compose.yml"
+CONTAINER="fastmath-dev"
+
+dc() {
+  HOST_UID="$(id -u)" HOST_GID="$(id -g)" docker compose -f "$COMPOSE_FILE" "$@"
+}
+
+case "${1:-help}" in
+  up)
+    docker rm -f "$CONTAINER" 2>/dev/null || true
+    dc up -d --build
+    echo "Waiting for container to be ready..."
+    docker exec "$CONTAINER" npm install
+    docker exec "$CONTAINER" npx prisma generate
+    echo "Dev container is ready."
+    ;;
+  down)
+    dc down
+    ;;
+  shell)
+    docker exec -it "$CONTAINER" zsh
+    ;;
+  nvim)
+    shift
+    docker exec -it "$CONTAINER" nvim "$@"
+    ;;
+  claude)
+    shift
+    docker exec -it "$CONTAINER" claude "$@"
+    ;;
+  claude-yolo)
+    shift
+    docker exec -it "$CONTAINER" claude --dangerously-skip-permissions "$@"
+    ;;
+  build)
+    dc build --no-cache
+    ;;
+  clean)
+    dc down -v
+    echo "Volumes removed. Next 'up' will reinstall everything."
+    ;;
+  help|*)
+    cat <<'EOF'
+Usage: ./dev <command>
+
+Commands:
+  up           Build image (if needed), start container, install deps
+  down         Stop container (volumes persist)
+  shell        Open a zsh shell inside the container
+  nvim [path]  Launch Neovim inside the container
+  claude       Run claude [args] inside the container
+  claude-yolo  Run claude with --dangerously-skip-permissions
+  build        Force-rebuild the image (no cache)
+  clean        Stop container and remove volumes (full reset)
+
+Examples:
+  ./dev up
+  ./dev shell
+  ./dev nvim
+  ./dev nvim src/cli/gameloop.ts
+  ./dev claude
+  ./dev claude-yolo
+  ./dev down
+EOF
+    ;;
+esac
