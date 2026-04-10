@@ -35,10 +35,15 @@ After 2 minutes, you get a zone breakdown, green-or-better rate, average error, 
 Requires Docker.
 
 ```bash
-./dev up        # build image, start container, install deps
-./dev shell     # open a shell inside the container
-npm run db:push # initialize the database (first time only)
-npm start       # play
+./dev up    # build image, start container, install deps
+./dev play  # start a game session
+```
+
+On first run, initialize the database from inside the container:
+
+```bash
+./dev shell
+npm run db:push
 ```
 
 Other dev commands:

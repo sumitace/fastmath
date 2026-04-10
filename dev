@@ -20,6 +20,9 @@ case "${1:-help}" in
   down)
     dc down
     ;;
+  play)
+    docker exec -it "$CONTAINER" npm start
+    ;;
   shell)
     docker exec -it "$CONTAINER" zsh
     ;;
@@ -49,6 +52,7 @@ Usage: ./dev <command>
 Commands:
   up           Build image (if needed), start container, install deps
   down         Stop container (volumes persist)
+  play         Start a game session
   shell        Open a zsh shell inside the container
   nvim [path]  Launch Neovim inside the container
   claude       Run claude [args] inside the container
